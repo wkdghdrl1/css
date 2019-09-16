@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='list.css'>
+    <script src='main.js'></script>
+</head>
+<body>
+
+    <div class="list_subject">
+        <h3>
+            <a href="#">게시글</a>
+        </h3>
+    </div>
+    
+    <div class="board_sort">
+        <span><a
+            href="${path}/board/list?sort_option=new&search_option=${map.search_option}&keyword=${map.keyword}">최신순</a></span>
+        <span>|</span> <span><a
+            href="${path}/board/list?sort_option=reply&search_option=${map.search_option}&keyword=${map.keyword}">댓글순</a></span>
+        <span>|</span> <span><a
+            href="${path}/board/list?sort_option=view&search_option=${map.search_option}&keyword=${map.keyword}">조회순</a></span>
+    </div>
+    <div>
+        <select id="search_option">
+            <option value="all"
+                <c:if test="${map.search_option == 'all'}">selected="selected"</c:if>>제목+내용</option>
+            <option value="title"
+                <c:if test="${map.search_option == 'title'}">selected="selected"</c:if>>제목</option>
+            <option value="content"
+                <c:if test="${map.search_option == 'content'}">selected="selected"</c:if>>내용</option>
+            <option value="writer"
+                <c:if test="${map.search_option == 'writer'}">selected="selected"</c:if>>이름</option>
+        </select>
+    </div> 
+    <div class="divSearch">
+    <input id="search_board" type="text" placeholder="검색"
+            value="${map.keyword}" />
+        <button id="search_btn" type="submit">검색</button>
+    </div>
+    <table class="list">
+        <tr>
+            <td>No</td>
+            <td>Title</td>
+            <td>작성자</td>
+            <td>작성일</td>
+            <td>조회수</td>
+            <td>첨부파일</td>
+        </tr>
+        <tbody>
+            <c:forEach items="${map.list}" var="bDto">
+                <jsp:useBean id="now" class="java.util.Date" />
+                <fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="today" />
+                <fmt:formatDate value="${bDto.regdate}" pattern="yyyy-MM-dd"
+                    var="regdate" />
+                <tr>
+                    <td>${bDto.bno}</td>
+                    <td><a href="${path}/board/view?bno=${bDto.bno}">${bDto.title}&nbsp;${bDto.replycnt}</a>
+                        <c:choose>
+                            <c:when test="${today == regdate}">
+                                    &nbsp;<span class="new"> new </span>
+                            </c:when>
+                        </c:choose></td>
+    
+                    <td>${bDto.writer}</td>
+                    <td><c:choose>
+                            <c:when test="${today == regdate }">
+                                <fmt:formatDate pattern="hh:mm:ss" value="${bDto.regdate}" />
+                            </c:when>
+                            <c:otherwise>
+                                     ${regdate}
+                                    </c:otherwise>
+                        </c:choose></td>
+                    <td>${bDto.viewcnt}</td>
+                    <td></td>
+                </tr>
+            </c:forEach>
+        </tbody>
+    </table>
+    <div>
+        <c:if test="${not empty map.keyword}">
+            <span>${map.keyword}로 검색한 결과는 총 ${map.count}건입니다.</span>
+        </c:if>
+    </div>
+    <div class="btn_write">
+        <button id="btn_write" type="submit">글쓰기</button>
+    </div>
+    
+    <div class="board_pagination">
+        <ul class="page_ul">
+            <c:if test="${map.pager.curBlock > 1 }">
+                <li><a
+                    href="${path}/board/list?curPage=${map.pager.blockBegin-10}&sort_option=${map.sort_option}&search_option=${map.search_option}&keyword=${map.keyword}">&laquo;</a></li>
+                <li><a
+                    href="${path}/board/list?curPage=1&sort_option=${map.sort_option}&search_option=${map.search_option}&keyword=${map.keyword}">1</a></li>
+                <li><a href="#">...</a></li>
+            </c:if>
+    
+            <c:forEach begin="${map.pager.blockBegin}" end="${map.pager.blockEnd}"
+                var="idx">
+                <li <c:out value="${map.pager.curPage == idx ? 'class=active' :''}"/>>
+                    <a
+                    href="${path}/board/list?curPage=${idx}&sort_option=${map.sort_option}&search_option=${map.search_option}&keyword=${map.keyword}">${idx}</a>
+                </li>
+            </c:forEach>
+            <c:if test="${map.pager.curBlock < map.pager.totBlock }">
+                <li><a href="#">...</a></li>
+                <li><a
+                    href="${path}/board/list?curPage=${map.pager.totPage}&sort_option=${map.sort_option}&search_option=${map.search_option}&keyword=${map.keyword}">${map.pager.totPage}</a></li>
+                <li><a
+                    href="${path}/board/list?curPage=${map.pager.blockEnd+1}&sort_option=${map.sort_option}&search_option=${map.search_option}&keyword=${map.keyword}">&raquo;</a></li>
+            </c:if>
+        </ul>
+    </div>
+
+    <script type="text/javascript">
+            
+            $(function() {
+                var sort = "${map.sort_option}";
+                if (sort == "new") {
+                    $('.board_sort > span:eq(0)').css('color', '#79a8a9').css(
+                            'font-weight', 'bold');
+                } else if (sort == "reply") {
+    
+                    $('.board_sort > span:eq(2)').css('color', '#79a8a9').css(
+                            'font-weight', 'bold');
+    
+                } else if (sort == "view") {
+    
+                    $('.board_sort > span:eq(4)').css('color', '#79a8a9').css(
+                            'font-weight', 'bold');
+                }
+    
+                $('#search_btn').click(
+                        function() {
+                            var search_option = $('#search_option').val();
+                            var keyword = $.trim($('#search_board').val());
+                            var sort = "${map.sort_option}";
+                            //유효성 체크
+                            if (keyword == null || keyword.length == 0) {
+                                $('#search_board').focus();
+                                $('#search_board').css('border',
+                                        '1px solid Crimson');
+                                return false;
+                            }
+    
+                            location.href = "${path}/board/list?sort_option="
+                                    + sort + "&search_option=" + search_option
+                                    + "&keyword=" + keyword;
+                        });
+                $('#search_board').keypress(
+                        function(enter) {
+                            if (enter.keyCode == 13) {
+                                var search_option = $('#search_option').val();
+                                var keyword = $.trim($('#search_board').val());
+                                var sort = "${map.sort_option}";
+                                //유효성 체크
+                                if (keyword == null || keyword.length == 0) {
+                                    $('#search_board').focus();
+                                    $('#search_board').css('border',
+                                            '1px solid Crimson');
+                                    return false;
+                                }
+    
+                                location.href = "${path}/board/list?sort_option="
+                                        + sort + "&search_option=" + search_option
+                                        + "&keyword=" + keyword;
+                            }
+                });
+        
+                $('#btn_write').click(function() {
+                    location.href = "${path}/board/write"
+            
+                });
+                
+                var msg = '${message}';
+                var uri = '${uri}';
+                if(msg == 'nologin') {
+                    $('#login_modal').css('display', 'block');
+                    $('.err.msg').css('display', 'block')
+                                    .text('로그인이 필요한 시스템입니다.');
+                }
+                
+                // 상세게시글에서 뒤로가기시 새로고침 동작
+                window.onpageshow = function(event) {
+                    if( event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+                        location.reload();
+                    }
+                }
+        });
+        </script>
+</body>
+</html>

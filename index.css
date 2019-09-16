@@ -1,0 +1,43 @@
+.movie_sort a{
+    text-decoration: none;
+    color: inherit;  
+}
+
+.list{
+    width: 95%;
+    border:1px solid #444444;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 10px auto;
+}
+
+.list td, th{
+    border-bottom:1px solid #444444;
+    padding: 10px;
+
+}
+
+.list th{
+    color: #2C3E50;
+    background-color: #EAEDED;
+}
+
+.list td{
+    color: #202020;
+    text-align: center;
+  
+}
+
+tr:nth-child(2n) {
+    background-color: #ccc;
+
+}
+
+tr:nth-child(2n+1){
+    background-color: #ddd;
+} 
+
+
+tr:hover{
+    background: bisque;
+}

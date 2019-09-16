@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+	<link rel='stylesheet' type='text/css' media='screen' href='include-header.css'>
+	<link rel='stylesheet' type='text/css' media='screen' href='index.css'>
+   <link rel='stylesheet' type='text/css' media='screen' href='button.css'>
+    <script src='main.js'></script>
+</head>
+
+<body>
+
+
+<div class="nav">	
+	<div class="h1">
+		<h1><a href="${path}/">hong</a></h1>
+	</div>
+		<div class="nav-item1">
+			<ul>
+			<li><a href="${path}/board/list">영화순위</a>
+					<ul class="ul-item">
+						<li><a href="${path}/sort?sort=booking">예매순</a></li>
+						<li><a href="${path}/sort?sort=score">평점순</a></li>
+						<li><a href="${path}/sort?sort=date">개봉일순</a></li>
+					</ul>
+				</li>
+			<li><a href='${path}/board/list'>게시판</a></li>
+		</ul>
+		</div>
+		
+	<div class="nav-right-item">
+		<div class="nav-item">
+			<c:choose>
+				<c:when test="${empty sessionScope.name}">
+                    <button id="join-menu" class="btn_button">회원가입</button>
+					<button id="login_btn"class="btn_button">로그인</button>
+				</c:when>
+				<c:otherwise>
+					<div class="div_login_name">${sessionScope.name}<span>님</span></div>
+				    <button id="logout_btn" class="btn_button"> 로그아웃</button>
+				    <button id="btn_mypage" class="btn_button">마이페이지</button>
+				</c:otherwise> 
+			</c:choose>
+		</div>
+	</div>
+</div>
+<div style="height: 70px"></div>
+<i class="fas fa-arrow-alt-circle-up top"></i>
+
+<div class="movie_sort">
+        <span id="booking"><a href="${path}/sort?sort=booking">예매순</a></span>
+        <span>|</span>
+        <span id="score"><a href="${path}/sort?sort=score">평점순</a></span>
+        <span>|</span>
+        <span id="date"><a href="${path}/sort?sort=date">개봉일순</a></span>
+    </div>
+    <div class="table-container">
+    <table class="list">
+        <tr>
+            <thead>
+                <tr class="list-subject">
+                    <th>Rank</th>
+                    <th>img</th>
+                    <th>제목</th>
+                    <th>장르</th>
+                    <th>감독</th>
+                    <th>배우</th>
+                    <th>개봉일</th>
+                    <th>예매율</th>
+                    <th>상영시간</th>
+                    <th>네이버 평점</th>
+                    <th>다음 평점</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${rankList}" var="one">
+                    <tr>
+                        <td>${one.rank}</td>
+                        <td><img src="${one.imgsrc}"></td>
+                        <td>${one.movie}</td>
+                        <td>${one.type}</td>
+                        <td>${one.director}</td>
+                        <td>${one.actor}</td>
+                        <td>${one.opendate}</td>
+                        <td>${one.bookingrate}</td>
+                        <td>${one.runtime}</td>
+                        <td>${one.naverscore}</td>
+                        <td>${one.daumscore}</td>
+                    </tr>
+                    
+                </c:forEach>
+            </tbody>
+    </table>
+
+<script>
+	$(function() {
+		$(window).scroll(function() {
+			if ($(this).scrollTop() > 40) {
+				$(".top").fadeIn()
+			} else {
+				$(".top").fadeOut()
+			}
+		})
+		$(".top").click(function() {
+			$("html, body").animate({
+				scrollTop : 0
+			}, 400);
+			return false;
+		})
+	})
+
+	// modal
+	$(function() {
+		$("#login_btn").click(function() {
+			$("#login_modal").css('display', 'block')
+			
+		})
+		$(document).keyup(function(evt) {
+			if (evt.keyCode == 27) {
+				$("#login_modal").css('display', 'none')
+				$('.err_msg').text("");
+				$('#username').val("");
+				$('#password').val("");
+			}
+		})
+
+		$("#join-menu").click(function() {
+			$("#modal-box").css('display', 'block')
+		})
+		$(document).keyup(function(evt) {
+			if (evt.KeyCode == 27) {
+				$("#modal-box").css('display', 'none')
+				$('.err_msg').text("");
+				$('#username').val("");
+				$('#password').val("");
+			}
+		})	
+		$('#logout_btn').click(function () {
+			$.ajax({
+				url: "${path}/member/logout",
+				type: "POST",
+				async: true,
+				success: function () {
+					location.reload();
+				},
+				 error:function(){
+					 alert("System Error");
+				 }
+				
+				})	
+		})
+
+	})
+</script>
+</body>
+</html>

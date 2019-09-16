@@ -1,0 +1,83 @@
+.h1 a{
+    text-decoration: none;
+    color:	#2C3E50;
+}
+
+.nav {
+    display: flex;
+    background-color:#EAEDED;
+}
+
+/* 무비 순위표에 맞추기위해  (매순 평점순 개봉일순)  */
+.movie_sort{
+	margin-left: 65px;
+}
+
+.nav-item {
+	margin-left:40px;  
+}
+
+.nav-item a {
+	list-style: none;
+	text-decoration: none;
+	color:inherit;
+}
+
+.nav-item1 li ul {
+	background: white;
+	display: none; /* 평상시에는 서브메뉴가 안보이게 하기 */
+	height: auto;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	position: absolute;
+	width: 80px;
+    z-index: 1;
+    
+}
+
+.nav-item1 ul{
+	display: flex;
+}
+
+.nav-item1 ul li {
+	list-style: none;
+	margin:15px 15px 0 0;
+}
+
+.nav-item1 li:hover ul {
+	display: block; /* 마우스 커서 올리면 서브메뉴 보이게 하기 */
+}
+
+.nav-content{
+	display: flex;
+}
+
+
+.ul-item li{
+    color:#2C3E50;
+}
+
+.nav-item1 ul a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.ul-item a{
+    text-decoration: none;
+    color: #85929E;
+}
+
+.top {
+	position: fixed;
+	bottom: 50px;
+	right: 2%;
+	font-size: 40px;
+	display: none;
+	cursor: pointer;
+}
+
+.nav-right-item {
+    display:flex;
+    margin-left:auto;
+}

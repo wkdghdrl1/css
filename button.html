@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='main.js'></script>
+</head>
+<style>
+    
+
+    .box{
+        position: relative;
+        display: inline-block;
+        font-family: poppins;
+        padding:  15px 20px;
+        margin: 5px;
+        background: #262626;
+        color: #fff;
+        text-decoration: none;
+        font-size: 16px;
+        z-index: 1;
+    }
+
+    .effect:before{
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        height: 0;
+        width: 0;
+        z-index: -1;
+        transition: .5s;
+    }
+
+    .effect:nth-child(1):before {
+        background-color: #3b5998;
+    }
+    .effect:nth-child(2):before {
+        background-color: #bd081c;
+    }
+    .effect:nth-child(3):before {
+        background-color: #dc4e41;
+    }
+    .effect:nth-child(4):before {
+        background-color: #ff0000;
+    }
+
+.effect:hover::before{
+    height: 100%;
+    width: 100%;
+    transition: .5s
+}
+</style>
+
+<body>
+    <div class="wrapper">
+        <a href="#" class="box effect">
+            <i class="fa fa-facebook"></i>&nbsp;Facebook
+        </a>
+        <a href="#" class="box effect">
+            <i class="fa fa-pinterest"></i>&nbsp;Pinterest
+        </a>
+        <a href="#" class="box effect">
+            <i class="fa fa-google-plus"></i>&nbsp;Google
+        </a>
+        <a href="#" class="box effect">
+            <i class="fa fa-youtube"></i>&nbsp;youtube
+        </a>
+    </div>
+</body>
+
+</html>
