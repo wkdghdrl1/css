@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Page Title</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='commentList.css'>
+    <script src='main.js'></script>
+</head>
+
+<body>
+    <div class="tbl_container">
+        <table>
+            <caption>글보기</caption>
+            <tr>
+                <th>제목</th>
+                <td colspan="3">${one.title}</td>
+            </tr>
+            <tr>
+                <th>작성일</th>
+                <td>${one.regdate}</td>
+                <th>작성자</th>
+                <td>${one.writer}</td>
+            </tr>
+            <tr>
+                <th>첨부파일</th>
+                <td></td>
+                <th>조회수</th>
+                <td>${one.viewcnt}</td>
+            </tr>
+            <tr class="tr_content">
+                <th>내용</th>
+                <td colspan="3" rowspan="4">${one.content}</td>
+            </tr>
+        </table>
+        <div class="button_container">
+            <c:if test="${sessionScope.name == one.writer}">
+                <button id="btn_update" class="btn_button">수정</button>
+                <button id="btn_delete" class="btn_button">삭제</button>
+            </c:if>
+            <a href="${path}/board/list"> <button id="btn_list" class="btn_button">목록으로</button></a>
+        </div>
+    </div>
+    <div id="reply_wrap">
+        <div id="commentList">
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="size">댓글 ${replyList.size()}</div>
+        <c:choose>
+            <c:when test="${empty replyList}">
+                <div class="re_container" style="margin-top: 10px">
+                    <div class="div_write">
+                        <p class="reple_text" rows="3" id="write_text">첫번째 댓글을 등록해주세요.</p>
+                    </div>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach items="${replyList}" var="replyview">
+                    <div class="re_container" style="margin-top: 10px">
+                        <p class="re_subject">댓글</p>
+                        <div>
+                            <p>${replyview.writer}</p>
+                        </div>
+                        <div>
+                            <p>작성일자 ${replyview.regdate}</p>
+                        </div>
+                        <div>
+                            ${replyview.content}
+                        </div>
+                        <c:if test="${sessionScope.name == replyview.writer }">
+                            <div class="div_button">
+                                <a id="btn_del" class="btn_button" data-seq="${replyview.rno}"
+                                    href="javascript:void(0)">삭제</a>
+                            </div>
+                        </c:if>
+                    </div>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+
+        <c:choose>
+            <c:when test="${empty sessionScope.name}">
+                <div class="re_login" style="margin-top: 10px">
+                    <div class="div_write">
+                        <p class="re_subject">댓글 달기</p>
+                        <a id="login" href="javascript:void(0)">로그인</a>을 하시면 댓글을 등록할 수
+                        있습니다.
+                    </div>
+                </div>
+            </c:when>
+
+            <c:otherwise>
+                <div class="content_write">
+                    <form id="frm_reply" method="POST"></form>
+                    <div class="content_write">${sessionScope.name}님</div>
+                    <div class="div_write">
+                        <textarea class="reple_text" rows="3" id="replyInsert" name="content"
+                            placeholder="댓글쓰기"></textarea>
+                        <script type="text/javascript" src="${path}/resources/smarteditor/js/service/HuskyEZCreator.js"
+                            charset="utf-8"></script>
+                        <script type="text/javascript">
+                            var oEditors = [];
+                            nhn.husky.EZCreator.createInIFrame({
+                                oAppRef: oEditors,
+                                elPlaceHolder: "replyInsert",
+                                sSkinURI: "${path}/resources/smarteditor/SmartEditor2Skin.html",
+                                fCreator: "createSEditor2",
+                                htParams: { fOnBeforeUnload: function () { } }// 에디터 내용 변경 경고창 삭제
+                            });
+                        </script>
+                    </div>
+                    <div class="div_button">
+                        <button class="btn_button" type="button" id="btn_reply">등록</button>
+                    </div>
+                    <input type="hidden" id="re_bno" name="bno" />
+                    </form>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
+</body>
+
+</html>
